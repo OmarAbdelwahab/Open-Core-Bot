@@ -26,7 +26,6 @@ module.exports.run = async (bot, message, args) => {
     fs.writeFile("./warnings.json", JSON.stringify(warns), (err) => {
 
         if (err) console.log(err);
-
     });
 
     let warnEmbed = new Discord.MessageEmbed()
@@ -39,7 +38,7 @@ module.exports.run = async (bot, message, args) => {
 
     let warnchannel = message.guild.channels.cache.find(warnchannel => warnchannel.name == "incidents");
   
-    if (!warnchannel) return message.reply("Couldn't find channel");
+    if(!warnchannel) return message.reply("Couldn't find channel");
 
     warnchannel.send(warnEmbed);
 
@@ -58,15 +57,17 @@ module.exports.run = async (bot, message, args) => {
         setTimeout(function () {
        
             wUserId.role.remove(muterole.id);
-       
-        });
+           
+            message.channel.reply(`<@${user.id}> has been unmuted.`);
+
+           }, ms(mutetime));
     }
 
     if (warns[wUser.id].warns == 3) {
 
         message.guild.member(wUser).ban(reason);
         
-        message.channel.send(`${wUser} has been banned.`);
+        message.reply(`${wUser} has been banned.`);
     }
 
 }
