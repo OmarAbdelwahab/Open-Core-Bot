@@ -6,14 +6,16 @@ module.exports.run = async (bot, message, args) => {
 
     const roleName = args[1];
 
-    const { guild } = message;
+    const {
+        guild
+    } = message;
 
-    const role = guild.roles.cache.find((role) =>{
-  
+    const role = guild.roles.cache.find((role) => {
+
         return role.name === roleName;
     });
 
-    if(!role) {
+    if (!role) {
         message.reply(`There is no role with the name ${roleName}`);
         return
     }
