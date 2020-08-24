@@ -13,7 +13,7 @@ module.exports.run = async (bot, message, args) => {
     
     let muterole = message.guild.roles.cache.find((muterole) => muterole.name === "muted");
     
-    //start of create role a7a 
+    //start of create role
     if(!muterole){
         try{
         
@@ -36,7 +36,7 @@ module.exports.run = async (bot, message, args) => {
         
         }
     }
-    //end of create role a7a
+    //end of create role
 
     let mutetime = args[1];
     if(!mutetime) return message.reply("You didn't specify a time!");
