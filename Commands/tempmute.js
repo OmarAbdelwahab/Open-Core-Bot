@@ -11,7 +11,7 @@ module.exports.run = async (bot, message, args) => {
 
     if(tomute.hasPermission("MANAGE_MESSAGE")) return message.reply("Can't mute them!");
     
-    let muterole = message.guild.roles.cache.find((muterole) => muterole.name === "muted");
+    let muterole = message.guild.roles.cache.find((muterole) => muterole.name == "muted");
     
     //start of create role
     if(!muterole){

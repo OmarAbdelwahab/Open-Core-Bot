@@ -4,7 +4,7 @@ module.exports.run = async (bot, message, args) => {
 
     console.log("reporting works");
 
-    let rUser = message.mentions.members.first() || message.guild.members.get(args[0]);
+    let rUser = message.mentions.members.first();
     
     if (!rUser) return message.channel.send("Couldn't find user.");
 
