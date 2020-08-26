@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-
     const mentionedUser = message.mentions.users.first();
 
     const roleName = args[1];
@@ -11,7 +10,6 @@ module.exports.run = async (bot, message, args) => {
     const role = guild.roles.cache.find((role) => {return role.name == roleName;});
 
     if (!role) {
-
         message.reply(`There is no role with the name ${roleName}`);
         
         return;
@@ -25,6 +23,5 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-
     name: "addrole"
 }

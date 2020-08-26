@@ -1,26 +1,22 @@
 const Discord = require ("discord.js");
 
 module.exports.run = async (bot, message, args) => {
+    //console.log("serverinfo working");
 
-    console.log("serverinfo working");
+    let sicon = message.guild.iconURL();
 
-        let sicon = message.guild.iconURL();
+    let serverembed = new Discord.MessageEmbed()
+        .setDescription("Server Information")
+        .setColor("15f153")
+        .setThumbnail(sicon)
+        .addField("Server Name", message.guild.name)
+        .addField("Created At", message.guild.createdAt)
+        .addField("You Joined", message.member.joinedAt)
+        .addField("Total Members", message.guild.memberCount);
 
-        let serverembed = new Discord.MessageEmbed()
-            .setDescription("Server Information")
-            .setColor("15f153")
-            .setThumbnail(sicon)
-            .addField("Server Name", message.guild.name)
-            .addField("Created At", message.guild.createdAt)
-            .addField("You Joined", message.member.joinedAt)
-            .addField("Total Members", message.guild.memberCount);
-
-        return message.channel.send(serverembed);
-
+    return message.channel.send(serverembed);
 }
 
 module.exports.help = {
-
     name : "serverinfo"
-
 }

@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-
-    console.log("reporting works");
+    //console.log("reporting works");
 
     let rUser = message.mentions.members.first();
     
@@ -24,11 +23,8 @@ module.exports.run = async (bot, message, args) => {
         .addField("Reason", reason);
 
     return reportchannel.send(reportEmbed);
-
 }
 
 module.exports.help = {
-
     name: "report"
-    
 }

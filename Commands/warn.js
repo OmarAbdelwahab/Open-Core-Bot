@@ -5,7 +5,6 @@ const ms = require("ms");
 let warns = JSON.parse(fs.readFileSync("./warnings.json", "utf8"));
 
 module.exports.run = async (bot, message, args) => {
-
     if (!message.member.hasPermission("MANAGE_MEMBERS")) return message.reply("You don't have the permission to warn users");
 
     let wUser = message.mentions.members.first();
@@ -17,14 +16,12 @@ module.exports.run = async (bot, message, args) => {
     let reason = args.join(" ").slice(22);
 
     if (!warns[wUser.id]) warns[wUser.id] = {
-
         warns: 0
     };
 
     warns[wUser.id].warns++;
 
     fs.writeFile("./warnings.json", JSON.stringify(warns), (err) => {
-
         if (err) console.log(err);
     });
 
@@ -55,24 +52,19 @@ module.exports.run = async (bot, message, args) => {
         message.channel.send(`${wUser.id} has been temprorily muted`);
 
         setTimeout(function () {
-       
-            wUserId.role.remove(muterole.id);
+                wUserId.role.remove(muterole.id);
            
-            message.channel.reply(`<@${user.id}> has been unmuted.`);
-
+                message.channel.reply(`<@${user.id}> has been unmuted.`);
            }, ms(mutetime));
     }
 
     if (warns[wUser.id].warns == 3) {
-
         message.guild.member(wUser).ban(reason);
         
         message.reply(`${wUser} has been banned.`);
     }
-
 }
 
 module.exports.help = {
-
     name: "warn"
 }

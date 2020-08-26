@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-
-    console.log("kicking works");
+    //console.log("kicking works");
 
     let kUser = message.mentions.members.first() || message.guild.members.get(args[0]);
     
@@ -33,7 +32,5 @@ module.exports.run = async (bot, message, args) => {
 }
 
 module.exports.help = {
-
     name: "kick"
-    
 }
