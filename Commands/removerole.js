@@ -17,10 +17,10 @@ module.exports.run = async(bot, message, args )=> {
         return;
     }
 
-    const member = guild.members.cache.get(mentionedUser.id);
+    const mentionedUserId = guild.members.cache.get(mentionedUser.id);
 
-    if(member.roles.cache.get(role.id)){
-        member.roles.remove(role)
+    if(mentionedUserId.roles.cache.get(role.id)){
+        mentionedUserId.roles.remove(role)
         
         message.reply(`That user no longer has the ${roleName} role.`);
     }
