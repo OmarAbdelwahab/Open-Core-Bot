@@ -4,7 +4,7 @@ const ms = require("ms");
 module.exports.run = async (bot, message, args) => {
     console.log("tempute working!");
 
-    let tomute = message.mentions.members.first() || message.guild.members.get(args[0]);
+    let tomute = message.mentions.members.first();
 
     if(!tomute) return message.reply("Couldn't find user.");
 
@@ -42,6 +42,7 @@ module.exports.run = async (bot, message, args) => {
 
     setTimeout(function(){
         tomute.removeRole(muterole.id);
+        
         message.channel.send(`<@${tomute.id}> has been unmuted!`);
     }, ms(mutetime));
 }

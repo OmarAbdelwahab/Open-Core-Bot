@@ -3,7 +3,7 @@ const Discord = require ("discord.js");
 module.exports.run = async (bot, message, args) => {
     //console.log("banning works");
 
-    let bUser = message.mentions.members.first() || message.guild.members.get(args[0]);
+    let bUser = message.mentions.members.first();
    
     if (!bUser) return message.channel.send("user is not found");
 
@@ -22,7 +22,7 @@ module.exports.run = async (bot, message, args) => {
         .addField("Time", message.createdAt)
         .addField("Reason", bReason);
 
-    const banChannel = message.guild.channel.cache.find((banChannel) => banChannel === "bans");
+    const banChannel = message.guild.channel.cache.find(banChannel => banChannel === "bans");
 
     if (!banChannel) return message.channel.send("can't find bans channels");
 
