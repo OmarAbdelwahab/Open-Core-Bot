@@ -62,5 +62,20 @@ bot.on("message", async (message) => {
     if(commandfile) commandfile.run(bot, message, args);
 });
 
+bot.on("guildMemberAdd", async member => {
+    const targetChannelId = '748300941999997089';
+
+    console.log(`${member.id} joined the server.`);
+
+    let welcomechannel = member.guild.channel.cache.find(welcomechannel => welcomechannel.name = "welcome_leave");
+    
+    const welcomeMessage = `welcome <@${member.id}> to the server! please check out 
+    ${member.guild.channels.cache
+    .get(targetChannelId)
+    .toString()}`
+
+    welcomechannel.send(welcomeMessage);
+});
+
 // login with the dicord bot token
 bot.login(process.env.TOKEN);
