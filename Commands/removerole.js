@@ -22,10 +22,10 @@ module.exports.run = async(bot, message, args )=> {
     if(mentionedUserId.roles.cache.get(role.id)){
         mentionedUserId.roles.remove(role)
         
-        message.reply(`That user no longer has the ${roleName} role.`);
+        message.reply(`That user no longer has the "${roleName}" role.`);
     }
     else{
-        message.reply(`That user does not have the ${roleName} role.`);
+        message.reply(`That user does not have the "${roleName}" role.`);
     }
 }
 
