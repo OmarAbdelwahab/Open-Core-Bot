@@ -28,6 +28,8 @@ fs.readdir("./commands/",(err, files)=>{
     });
 });
 
+//Event Listeners
+
 // when the bot is started, display several stats in console
 bot.on("ready", async () => {
     console.log(`${bot.user.username} is online`);
@@ -68,7 +70,7 @@ bot.on("guildMemberAdd", async member => {
 
     console.log(`${member.id} joined the server.`);
 
-    let welcomeChannel = member.guild.channels.cache.find(welcomechannel => welcomechannel.name == "welcome_leave");
+    let welcomeChannel = member.guild.channels.cache.find(welcomechannel => welcomeChannel.name == "welcome_leave");
     
     const welcomeMessage = `welcome <@${member.id}> to the server! please check out 
     ${member.guild.channels.cache
@@ -78,8 +80,32 @@ bot.on("guildMemberAdd", async member => {
     welcomeChannel.send(welcomeMessage);
 });
 
-//a channel message to indicate a user left the the server
+//a channel message to indicate when a user leaves the the server
+bot.on("guildMemberRemove", async member =>{
+    console.log(`${member.id} left the server.`);
 
+    let welcomeChannel = member.guild.channels.cache.find(welcomeChannel => welcomeChannel.name == "welcome_leave");
+
+    welcome.send(`${member} has bailed on the server!`);    
+});
+
+//a channel message to indicate a channel creation 
+bot.on("channelCreate", async channel => {
+    console.log(`${channel.name} has been created.`);
+
+    let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
+
+    generalChannel.send(`${channel} has been created`);
+})
+
+//a channel deletion to indicate a channel deletion
+bot.on("channelDelete", async channel=>{
+    console.log(`The channel ${channel.name} has been created`);
+
+    let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
+
+    generalChannel.send(`The channel ${channel.name} has been deleted.`);
+});
 
 // login with the dicord bot token
 bot.login(process.env.TOKEN);
