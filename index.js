@@ -62,7 +62,7 @@ bot.on("message", async (message) => {
     if(commandfile) commandfile.run(bot, message, args);
 });
 
-// welome message when a new member joins
+// welcome message when a new member joins
 bot.on("guildMemberAdd", async member => {
     const targetChannelId = '748300941999997089';
 
