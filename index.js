@@ -64,19 +64,22 @@ bot.on("message", async (message) => {
 
 // welcome message when a new member joins
 bot.on("guildMemberAdd", async member => {
-    const targetChannelId = '748300941999997089';
+    const targetChannelId = '748702149055086652';
 
     console.log(`${member.id} joined the server.`);
 
-    let welcomechannel = member.guild.channel.cache.find(welcomechannel => welcomechannel.name = "welcome_leave");
+    let welcomeChannel = member.guild.channels.cache.find(welcomechannel => welcomechannel.name == "welcome_leave");
     
     const welcomeMessage = `welcome <@${member.id}> to the server! please check out 
     ${member.guild.channels.cache
     .get(targetChannelId)
-    .toString()}`
+    .toString()} for the Rules.`
 
-    welcomechannel.send(welcomeMessage);
+    welcomeChannel.send(welcomeMessage);
 });
+
+//a channel message to indicate a user left the the server
+
 
 // login with the dicord bot token
 bot.login(process.env.TOKEN);
