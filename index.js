@@ -95,16 +95,16 @@ bot.on("channelCreate", async channel => {
 
     let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
 
-    generalChannel.send(`${channel} has been created`);
+    generalChannel.send(`The channel <#${channel.id}> has been created.`);
 })
 
-//a channel deletion to indicate a channel deletion
+//a channel message to indicate a channel deletion
 bot.on("channelDelete", async channel=>{
-    console.log(`The channel ${channel.name} has been created`);
+    console.log(`${channel.name} has been deleted.`);
 
     let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
 
-    generalChannel.send(`The channel ${channel.name} has been deleted.`);
+    generalChannel.send(`The channel "#${channel.name}" has been deleted.`);
 });
 
 // login with the dicord bot token
