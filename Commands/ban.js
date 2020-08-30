@@ -1,7 +1,6 @@
 const Discord = require ("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-    //console.log("banning works");
 
     let bUser = message.mentions.members.first();
    
