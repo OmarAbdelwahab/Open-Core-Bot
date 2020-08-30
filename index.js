@@ -41,7 +41,7 @@ bot.on("ready", async () => {
 
 // when a command is issued in a message for the bot then respond
 bot.on("message", async (message) => {
-    const prefix = "!"; //command prefix
+    let defaultPrefix = "!"; //command prefix
 
     /*if the message author is the bot itself, or the message is a dm, 
       or the message doesn't start with a prefix then don't do shit*/
@@ -59,9 +59,18 @@ bot.on("message", async (message) => {
     let args = messageArray.slice(1);
 
     //command handler
-    let commandfile = bot.commands.get(cmd.slice(prefix.length));
+    let commandfile = bot.commands.get(cmd.slice(defaultPrefix.length));
 
     if(commandfile) commandfile.run(bot, message, args);
+
+    //custom prefix command
+    if(!prefix[message.guild.id]){
+        prefixes[message.guild.id] = {
+            prefixes: defaultPrefix
+        };
+    }
+    
+    let prefix = prefix[message.guild.id].prefixes;
 });
 
 // welcome message when a new member joins
