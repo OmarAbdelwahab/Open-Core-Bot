@@ -20,6 +20,7 @@ module.exports.run = async (bot, message, args) => {
                 color: "#000000",
                 permissions:[]
             });
+            
             message.guild.channels.forEach(async (channel, id)=>{
                 await channel.overwritePermissions(muterole, {
                     SEND_MESSAGES: false,
@@ -36,13 +37,13 @@ module.exports.run = async (bot, message, args) => {
    
     if(!mutetime) return message.reply("You didn't specify a time!");
     
-    // all this shit has to be refactored down below
-    await(tomute.addRole(muterole.id));
+    // mute and unmute function - refactored
+    await(tomute.roles.add(muterole.id));
    
     message.reply(`<@{tomute.id} has been muted for ${ms(ms(mutetime))}`);
 
     setTimeout(function(){
-        tomute.removeRole(muterole.id);
+        tomute.roles.remove(muterole.id);
         
         message.channel.send(`<@${tomute.id}> has been unmuted!`);
     }, ms(mutetime));
