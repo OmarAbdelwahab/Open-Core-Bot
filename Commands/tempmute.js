@@ -37,7 +37,7 @@ module.exports.run = async (bot, message, args) => {
    
     if(!mutetime) return message.reply("You didn't specify a time!");
     
-    // mute and unmute function - refactored
+    // mute and unmute function - refactored - not tested
     await(tomute.roles.add(muterole.id));
    
     message.reply(`<@{tomute.id} has been muted for ${ms(ms(mutetime))}`);
