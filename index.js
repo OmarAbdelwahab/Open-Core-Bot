@@ -71,6 +71,7 @@ bot.on("message", async (message) => {
     }
     
     let prefix = prefix[message.guild.id].prefixes;
+    console.log(prefix);
 });
 
 // welcome message when a new member joins
