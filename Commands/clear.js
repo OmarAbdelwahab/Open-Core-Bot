@@ -1,5 +1,6 @@
 const Discord = require("discord.js");
 
+// clear messages that are less than a week old "i think"
 module.exports.run = async(bot, message, args) => {
 
     if(!message.member.hasPermission("MANAGE_MESSSAGES")) return message.reply("You don't have the required permissions");
@@ -13,3 +14,4 @@ module.exports.run = async(bot, message, args) => {
 module.exports.help = {
     name: "clear"
 }
+
