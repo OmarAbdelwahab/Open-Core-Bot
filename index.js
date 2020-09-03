@@ -4,6 +4,7 @@ const bot = new Discord.Client({disableEveryone: true}); //initialize the bot
 const fs = require("fs"); //spaghetti code
 bot.commands =  new Discord.Collection; // spaghetti code 
 
+
 config({
     path: __dirname + "/.env", //spaghetti code
 });
@@ -39,7 +40,7 @@ bot.on("ready", async () => {
     console.log(`Open Core Bot Server Count: ${bot.guilds.cache.size}`);
 });
 
-// when a command is issued in a message for the bot then respond
+// if a command is issued in a message for the bot then respond
 bot.on("message", async (message) => {
     let defaultPrefix = "!"; //command prefix
 
@@ -49,7 +50,7 @@ bot.on("message", async (message) => {
    
     if (message.channel.type === "dm") return;
    
-    if (!message.content.startsWith(prefix)) return;
+    //if (!message.content.startsWith(defaultPrefix)) return;
 
     // split the message content
     let messageArray = message.content.split(" ");
@@ -62,17 +63,7 @@ bot.on("message", async (message) => {
     let commandfile = bot.commands.get(cmd.slice(defaultPrefix.length));
 
     if(commandfile) commandfile.run(bot, message, args);
-
-    //custom prefix command
-    if(!prefix[message.guild.id]){
-        prefixes[message.guild.id] = {
-            prefixes: defaultPrefix
-        };
-    }
-    
-    let prefix = prefix[message.guild.id].prefixes;
-    console.log(prefix);
-});
+  });
 
 // welcome message when a new member joins
 bot.on("guildMemberAdd", async member => {
@@ -96,7 +87,7 @@ bot.on("guildMemberRemove", async member =>{
 
     let welcomeChannel = member.guild.channels.cache.find(welcomeChannel => welcomeChannel.name == "welcome_leave");
 
-    welcome.send(`${member} has bailed on the server!`);    
+    welcomeChannel.send(`${member} has bailed on the server!`);    
 });
 
 //a channel message to indicate a channel creation 
