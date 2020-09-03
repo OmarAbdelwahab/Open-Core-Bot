@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const ms = require("ms");
 
 module.exports.run = async (bot, message, args) => {
+
     console.log("tempute working!");
 
     let tomute = message.mentions.members.first();

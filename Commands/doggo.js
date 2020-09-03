@@ -3,6 +3,7 @@ const superagent = require("superagent");
 
 //SuperAgent doggo demo
 module.exports.run = async (bot, message, args) => {
+
     let {
         body
     } = await superagent.get(`https://random.dog/woof.json`);

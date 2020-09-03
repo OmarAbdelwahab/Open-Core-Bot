@@ -5,6 +5,7 @@ const ms = require("ms");
 let warns = JSON.parse(fs.readFileSync("./warnings.json", "utf8"));
 
 module.exports.run = async (bot, message, args) => {
+
     if (!message.member.hasPermission("MANAGE_MEMBERS")) return message.reply("You don't have the required permissions or moderater role.");
 
     let wUser = message.mentions.users.first();

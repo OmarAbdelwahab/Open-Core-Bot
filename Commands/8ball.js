@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
+
     if (!args[2]) return message.reply("Please ask a full question!");
 
     let replies = ["Yes.", "No.", "I don't know.", "Ask again later."];

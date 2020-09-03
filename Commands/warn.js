@@ -5,6 +5,7 @@ const ms = require("ms");
 let warns = JSON.parse(fs.readFileSync("./warnings.json", "utf8"));
 
 module.exports.run = async (bot, message, args) => {
+
     if (!message.member.hasPermission("MANAGE_MEMBERS")) return message.reply("You don't have the permission to warn users");
 
     let wUser = message.mentions.members.first();
@@ -59,6 +60,7 @@ module.exports.run = async (bot, message, args) => {
     }
 
     if (warns[wUser.id].warns == 3) {
+
         message.guild.member(wUser).ban(reason);
 
         message.reply(`${wUser} has been banned.`);

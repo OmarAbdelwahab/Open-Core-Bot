@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
+
     let kUser = message.mentions.members.first();
 
     if (!kUser) return message.channel.send("Can't find user!");

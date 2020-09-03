@@ -1,6 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
+
     const mentionedUser = message.mentions.users.first();
 
     const roleName = args[1];

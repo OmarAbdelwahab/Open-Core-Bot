@@ -17,6 +17,7 @@ config({
 
 //console messages to indicate which files are loaded
 fs.readdir("./commands/", (err, files) => {
+
     if (err) console.log(err);
 
     let jsfile = files.filter(f => f.split(".").pop() === "js");
@@ -27,6 +28,7 @@ fs.readdir("./commands/", (err, files) => {
     }
 
     jsfile.forEach((f, i) => {
+
         let props = require(`./commands/${f}`);
 
         console.log(`${f} loaded!`);
@@ -38,6 +40,7 @@ fs.readdir("./commands/", (err, files) => {
 //Event Listeners
 // when the bot is started, display several stats in console
 bot.on("ready", async () => {
+
     console.log(`${bot.user.username} is online`);
     // set bot status to a certain message
     bot.user.setActivity("Developing Open Core Bot");
@@ -47,6 +50,7 @@ bot.on("ready", async () => {
 
 // if a command is issued in a message for the bot then respond
 bot.on("message", async (message) => {
+
     let defaultPrefix = "!"; //command prefix
 
     /*if the message author is the bot itself, or the message is a dm, 
@@ -87,6 +91,7 @@ bot.on("message", async (message) => {
 
 // welcome message when a new member joins
 bot.on("guildMemberAdd", async member => {
+
     const targetChannelId = '748702149055086652';
 
     console.log(`${member.id} joined the server.`);
@@ -103,6 +108,7 @@ bot.on("guildMemberAdd", async member => {
 
 //a channel message to indicate when a user leaves the the server
 bot.on("guildMemberRemove", async member => {
+
     console.log(`${member.id} left the server.`);
 
     let welcomeChannel = member.guild.channels.cache.find(welcomeChannel => welcomeChannel.name == "welcome_leave");
@@ -112,6 +118,7 @@ bot.on("guildMemberRemove", async member => {
 
 //a channel message to indicate a channel creation 
 bot.on("channelCreate", async channel => {
+
     console.log(`${channel.name} has been created.`);
 
     let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
@@ -121,6 +128,7 @@ bot.on("channelCreate", async channel => {
 
 //a channel message to indicate a channel deletion
 bot.on("channelDelete", async channel => {
+
     console.log(`${channel.name} has been deleted.`);
 
     let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
