@@ -1,34 +1,35 @@
-const Discord = require ("discord.js");
+const Discord = require("discord.js");
 
-module.exports.run = async(bot, message, args )=> {
+module.exports.run = async (bot, message, args) => {
     const mentionedUser = message.mentions.users.first();
 
     const roleName = args[1];
 
-    const { guild } = message;
+    const {
+        guild
+    } = message;
 
-    const role = guild.roles.cache.find((role) =>{
-          return role.name === roleName;
+    const role = guild.roles.cache.find((role) => {
+        return role.name === roleName;
     });
 
-    if(!role) {
+    if (!role) {
         message.reply(`There is no role with the name ${roleName}`);
-  
+
         return;
     }
 
     const mentionedUserId = guild.members.cache.get(mentionedUser.id);
 
-    if(mentionedUserId.roles.cache.get(role.id)){
+    if (mentionedUserId.roles.cache.get(role.id)) {
         mentionedUserId.roles.remove(role)
-        
+
         message.reply(`That user no longer has the "${roleName}" role.`);
-    }
-    else{
+    } else {
         message.reply(`That user does not have the "${roleName}" role.`);
     }
 }
 
 module.exports.help = {
-    name:"removerole"
+    name: "removerole"
 }

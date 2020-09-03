@@ -34,33 +34,33 @@ module.exports.run = async (bot, message, args) => {
         .addField("Reason", reason);
 
     let warnchannel = message.guild.channels.cache.find(warnchannel => warnchannel.name == "incidents");
-  
-    if(!warnchannel) return message.reply("Couldn't find channel");
+
+    if (!warnchannel) return message.reply("Couldn't find channel");
 
     warnchannel.send(warnEmbed);
 
     if (warns[wUser.id].warns == 2) {
 
         let muterole = message.guild.roles.cache.find(muterole => muterole.name == "muted");
-       
+
         if (!muterole) return message.reply("Role not found");
 
         let mutetime = "10s";
-       
+
         await (wUser.addRole(muterole.id));
-       
+
         message.channel.send(`${wUser.id} has been temprorily muted`);
 
         setTimeout(function () {
-                wUserId.role.remove(muterole.id);
-           
-                message.channel.reply(`<@${user.id}> has been unmuted.`);
-           }, ms(mutetime));
+            wUserId.role.remove(muterole.id);
+
+            message.channel.reply(`<@${user.id}> has been unmuted.`);
+        }, ms(mutetime));
     }
 
     if (warns[wUser.id].warns == 3) {
         message.guild.member(wUser).ban(reason);
-        
+
         message.reply(`${wUser} has been banned.`);
     }
 }

@@ -3,7 +3,7 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, message, args) => {
 
     let rUser = message.mentions.members.first();
-    
+
     if (!rUser) return message.channel.send("Couldn't find user.");
 
     let reason = args.join(" ").slice(22);

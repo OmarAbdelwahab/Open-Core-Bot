@@ -2,13 +2,13 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
     let kUser = message.mentions.members.first();
-    
+
     if (!kUser) return message.channel.send("Can't find user!");
 
     let kReason = args.join(" ").slice(22);
 
     if (!message.member.hasPermission("MANAGE_MESSAGES")) return message.channel.send("You are not an Admin.");
-   
+
     if (kUser.hasPermission("MANAGE_MESSAGES")) return message.channel.send("That person can't be kicked.");
 
     let kickembed = new Discord.MessageEmbed()

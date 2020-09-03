@@ -1,10 +1,14 @@
 const Discord = require("discord.js"); // discord library
-const {config} = require("dotenv"); // spaghetti code
-const bot = new Discord.Client({disableEveryone: true}); //initialize the bot 
+const {
+    config
+} = require("dotenv"); // spaghetti code
+const bot = new Discord.Client({
+    disableEveryone: true
+}); //initialize the bot 
 const fs = require("fs"); //spaghetti code
 let cooldown = new Set();
 let cdseconds = 5;
-bot.commands =  new Discord.Collection; // spaghetti code 
+bot.commands = new Discord.Collection; // spaghetti code 
 
 
 config({
@@ -12,12 +16,12 @@ config({
 });
 
 //console messages to indicate which files are loaded
-fs.readdir("./commands/",(err, files)=>{
-    if(err) console.log(err);
+fs.readdir("./commands/", (err, files) => {
+    if (err) console.log(err);
 
     let jsfile = files.filter(f => f.split(".").pop() === "js");
-   
-    if(jsfile.length <= 0){
+
+    if (jsfile.length <= 0) {
         console.log("Couldn't find commands.");
         return;
     }
@@ -48,38 +52,38 @@ bot.on("message", async (message) => {
     /*if the message author is the bot itself, or the message is a dm, 
       or the message doesn't start with a prefix then don't do shit*/
     if (message.author.bot) return;
-   
+
     if (message.channel.type === "dm") return;
-   
+
     if (!message.content.startsWith(defaultPrefix)) return;
 
     //cooldown conditions
-    if(cooldown.has(message.author.id)){
+    if (cooldown.has(message.author.id)) {
         message.delete();
         return message.reply("You have to wait 5 seconds between commands.");
     }
 
-   // if(message.member.hasPermission("ADMINISTRATOR")){
-        cooldown.add(message.author.id);
-  //  }
+    // if(message.member.hasPermission("ADMINISTRATOR")){
+    cooldown.add(message.author.id);
+    //  }
 
     // split the message content
     let messageArray = message.content.split(" ");
-   
+
     let cmd = messageArray[0];
-   
+
     let args = messageArray.slice(1);
 
     //command handler
     let commandfile = bot.commands.get(cmd.slice(defaultPrefix.length));
 
-    if(commandfile) commandfile.run(bot, message, args);
+    if (commandfile) commandfile.run(bot, message, args);
 
     //cooldown timeout
     setTimeout(() => {
         cooldown.delete(message.author.id);
     }, cdseconds * 1000);
-  });
+});
 
 // welcome message when a new member joins
 bot.on("guildMemberAdd", async member => {
@@ -88,7 +92,7 @@ bot.on("guildMemberAdd", async member => {
     console.log(`${member.id} joined the server.`);
 
     let welcomeChannel = member.guild.channels.cache.find(welcomechannel => welcomeChannel.name == "welcome_leave");
-    
+
     const welcomeMessage = `welcome <@${member.id}> to the server! please check out 
     ${member.guild.channels.cache
     .get(targetChannelId)
@@ -98,12 +102,12 @@ bot.on("guildMemberAdd", async member => {
 });
 
 //a channel message to indicate when a user leaves the the server
-bot.on("guildMemberRemove", async member =>{
+bot.on("guildMemberRemove", async member => {
     console.log(`${member.id} left the server.`);
 
     let welcomeChannel = member.guild.channels.cache.find(welcomeChannel => welcomeChannel.name == "welcome_leave");
 
-    welcomeChannel.send(`${member} has bailed on the server!`);    
+    welcomeChannel.send(`${member} has bailed on the server!`);
 });
 
 //a channel message to indicate a channel creation 
@@ -116,7 +120,7 @@ bot.on("channelCreate", async channel => {
 })
 
 //a channel message to indicate a channel deletion
-bot.on("channelDelete", async channel=>{
+bot.on("channelDelete", async channel => {
     console.log(`${channel.name} has been deleted.`);
 
     let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
