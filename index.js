@@ -2,6 +2,8 @@ const Discord = require("discord.js"); // discord library
 const {config} = require("dotenv"); // spaghetti code
 const bot = new Discord.Client({disableEveryone: true}); //initialize the bot 
 const fs = require("fs"); //spaghetti code
+let cooldown = new Set();
+let cdseconds = 5;
 bot.commands =  new Discord.Collection; // spaghetti code 
 
 
@@ -30,7 +32,6 @@ fs.readdir("./commands/",(err, files)=>{
 });
 
 //Event Listeners
-
 // when the bot is started, display several stats in console
 bot.on("ready", async () => {
     console.log(`${bot.user.username} is online`);
@@ -50,7 +51,17 @@ bot.on("message", async (message) => {
    
     if (message.channel.type === "dm") return;
    
-    //if (!message.content.startsWith(defaultPrefix)) return;
+    if (!message.content.startsWith(defaultPrefix)) return;
+
+    //cooldown conditions
+    if(cooldown.has(message.author.id)){
+        message.delete();
+        return message.reply("You have to wait 5 seconds between commands.");
+    }
+
+   // if(message.member.hasPermission("ADMINISTRATOR")){
+        cooldown.add(message.author.id);
+  //  }
 
     // split the message content
     let messageArray = message.content.split(" ");
@@ -63,6 +74,11 @@ bot.on("message", async (message) => {
     let commandfile = bot.commands.get(cmd.slice(defaultPrefix.length));
 
     if(commandfile) commandfile.run(bot, message, args);
+
+    //cooldown timeout
+    setTimeout(() => {
+        cooldown.delete(message.author.id);
+    }, cdseconds * 1000);
   });
 
 // welcome message when a new member joins
