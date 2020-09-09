@@ -5,68 +5,72 @@ const ms = require("ms");
 let warns = JSON.parse(fs.readFileSync("./warnings.json", "utf8"));
 
 module.exports.run = async (bot, message, args) => {
+  if (!message.member.hasPermission("MANAGE_MEMBERS"))
+    return message.reply("You don't have the permission to warn users");
 
-    if (!message.member.hasPermission("MANAGE_MEMBERS")) return message.reply("You don't have the permission to warn users");
+  let wUser = message.mentions.members.first();
 
-    let wUser = message.mentions.members.first();
+  if (!wUser) return message.reply("Could not find user.");
 
-    if (!wUser) return message.reply("Could not find user.");
+  if (wUser.hasPermission("MANAGE_MESSAGES"))
+    return message.reply("This user is a moderater or has a high role.");
 
-    if (wUser.hasPermission("MANAGE_MESSAGES")) return message.reply("This user is a moderater or has a high role.");
+  let reason = args.join(" ").slice(22);
 
-    let reason = args.join(" ").slice(22);
-
-    if (!warns[wUser.id]) warns[wUser.id] = {
-        warns: 0
+  if (!warns[wUser.id])
+    warns[wUser.id] = {
+      warns: 0,
     };
 
-    warns[wUser.id].warns++;
+  warns[wUser.id].warns++;
 
-    fs.writeFile("./warnings.json", JSON.stringify(warns), (err) => {
-        if (err) console.log(err);
-    });
+  fs.writeFile("./warnings.json", JSON.stringify(warns), (err) => {
+    if (err) console.log(err);
+  });
 
-    let warnEmbed = new Discord.MessageEmbed()
-        .setDescription("Warns")
-        .setAuthor(message.author.username)
-        .setColor("#fc6400")
-        .addField("Warned User", wUser.tag)
-        .addField("Number of Warnings", warns[wUser.id].warns)
-        .addField("Reason", reason);
+  let warnEmbed = new Discord.MessageEmbed()
+    .setDescription("Warns")
+    .setAuthor(message.author.username)
+    .setColor("#fc6400")
+    .addField("Warned User", wUser.tag)
+    .addField("Number of Warnings", warns[wUser.id].warns)
+    .addField("Reason", reason);
 
-    let warnchannel = message.guild.channels.cache.find(warnchannel => warnchannel.name == "incidents");
+  let warnchannel = message.guild.channels.cache.find(
+    (warnchannel) => warnchannel.name == "incidents"
+  );
 
-    if (!warnchannel) return message.reply("Couldn't find channel");
+  if (!warnchannel) return message.reply("Couldn't find channel");
 
-    warnchannel.send(warnEmbed);
+  warnchannel.send(warnEmbed);
 
-    if (warns[wUser.id].warns == 2) {
+  if (warns[wUser.id].warns == 2) {
+    let muterole = message.guild.roles.cache.find(
+      (muterole) => muterole.name == "muted"
+    );
 
-        let muterole = message.guild.roles.cache.find(muterole => muterole.name == "muted");
+    if (!muterole) return message.reply("Role not found");
 
-        if (!muterole) return message.reply("Role not found");
+    let mutetime = "10s";
 
-        let mutetime = "10s";
+    await wUser.addRole(muterole.id);
 
-        await (wUser.addRole(muterole.id));
+    message.channel.send(`${wUser.id} has been temprorily muted`);
 
-        message.channel.send(`${wUser.id} has been temprorily muted`);
+    setTimeout(function () {
+      wUserId.role.remove(muterole.id);
 
-        setTimeout(function () {
-            wUserId.role.remove(muterole.id);
+      message.channel.reply(`<@${user.id}> has been unmuted.`);
+    }, ms(mutetime));
+  }
 
-            message.channel.reply(`<@${user.id}> has been unmuted.`);
-        }, ms(mutetime));
-    }
+  if (warns[wUser.id].warns == 3) {
+    message.guild.member(wUser).ban(reason);
 
-    if (warns[wUser.id].warns == 3) {
-
-        message.guild.member(wUser).ban(reason);
-
-        message.reply(`${wUser} has been banned.`);
-    }
-}
+    message.reply(`${wUser} has been banned.`);
+  }
+};
 
 module.exports.help = {
-    name: "warn"
-}
+  name: "warn",
+};
