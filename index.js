@@ -1,139 +1,138 @@
 const Discord = require("discord.js"); // discord library
-const {
-    config
-} = require("dotenv"); // spaghetti code
+const { config } = require("dotenv"); // spaghetti code
 const bot = new Discord.Client({
-    disableEveryone: true
-}); //initialize the bot 
+  disableEveryone: true,
+}); //initialize the bot
 const fs = require("fs"); //spaghetti code
 let cooldown = new Set();
 let cdseconds = 5;
-bot.commands = new Discord.Collection; // spaghetti code 
-
+bot.commands = new Discord.Collection(); // spaghetti code
 
 config({
-    path: __dirname + "/.env", //spaghetti code
+  path: __dirname + "/.env", //spaghetti code
 });
 
 //console messages to indicate which files are loaded
 fs.readdir("./commands/", (err, files) => {
+  if (err) console.log(err);
 
-    if (err) console.log(err);
+  let jsfile = files.filter((f) => f.split(".").pop() === "js");
 
-    let jsfile = files.filter(f => f.split(".").pop() === "js");
+  if (jsfile.length <= 0) {
+    console.log("Couldn't find commands.");
+    return;
+  }
 
-    if (jsfile.length <= 0) {
-        console.log("Couldn't find commands.");
-        return;
-    }
+  jsfile.forEach((f, i) => {
+    let props = require(`./commands/${f}`);
 
-    jsfile.forEach((f, i) => {
+    console.log(`${f} loaded!`);
 
-        let props = require(`./commands/${f}`);
-
-        console.log(`${f} loaded!`);
-
-        bot.commands.set(props.help.name, props);
-    });
+    bot.commands.set(props.help.name, props);
+  });
 });
 
 //Event Listeners
 // when the bot is started, display several stats in console
 bot.on("ready", async () => {
-
-    console.log(`${bot.user.username} is online`);
-    // set bot status to a certain message
-    bot.user.setActivity("Developing Open Core Bot");
-    // the number of servers using this bot
-    console.log(`Open Core Bot Server Count: ${bot.guilds.cache.size}`);
+  console.log(`${bot.user.username} is online`);
+  // set bot status to a certain message
+  bot.user.setActivity("Developing Open Core Bot");
+  // the number of servers using this bot
+  console.log(`Open Core Bot Server Count: ${bot.guilds.cache.size}`);
 });
 
 // if a command is issued in a message for the bot then respond
 bot.on("message", async (message) => {
+  let defaultPrefix = "!"; //command prefix
 
-    let defaultPrefix = "!"; //command prefix
-
-    /*if the message author is the bot itself, or the message is a dm, 
+  /*if the message author is the bot itself, or the message is a dm, 
       or the message doesn't start with a prefix then don't do shit*/
-    if (message.author.bot) return;
+  if (message.author.bot) return;
 
-    if (message.channel.type === "dm") return;
+  if (message.channel.type === "dm") return;
 
-    if (!message.content.startsWith(defaultPrefix)) return;
+  if (!message.content.startsWith(defaultPrefix)) return;
 
-    //cooldown conditions
-    if (cooldown.has(message.author.id)) {
-        message.delete();
-        return message.reply("You have to wait 5 seconds between commands.");
-    }
+  //cooldown conditions
+  if (cooldown.has(message.author.id)) {
+    message.delete();
+    return message.reply("You have to wait 5 seconds between commands.");
+  }
 
-    // if(message.member.hasPermission("ADMINISTRATOR")){
-    cooldown.add(message.author.id);
-    //  }
+  // if(message.member.hasPermission("ADMINISTRATOR")){
+  cooldown.add(message.author.id);
+  //  }
 
-    // split the message content
-    let messageArray = message.content.split(" ");
+  // split the message content
+  let messageArray = message.content.split(" ");
 
-    let cmd = messageArray[0];
+  let cmd = messageArray[0];
 
-    let args = messageArray.slice(1);
+  let args = messageArray.slice(1);
 
-    //command handler
-    let commandfile = bot.commands.get(cmd.slice(defaultPrefix.length));
+  //command handler
+  let commandfile = bot.commands.get(cmd.slice(defaultPrefix.length));
 
-    if (commandfile) commandfile.run(bot, message, args);
+  if (commandfile) commandfile.run(bot, message, args);
 
-    //cooldown timeout
-    setTimeout(() => {
-        cooldown.delete(message.author.id);
-    }, cdseconds * 1000);
+  //cooldown timeout
+  setTimeout(() => {
+    cooldown.delete(message.author.id);
+  }, cdseconds * 1000);
 });
 
 // welcome message when a new member joins
-bot.on("guildMemberAdd", async member => {
+bot.on("guildMemberAdd", async (member) => {
+  const targetChannelId = "748702149055086652";
 
-    const targetChannelId = '748702149055086652';
+  console.log(`${member.id} joined the server.`);
 
-    console.log(`${member.id} joined the server.`);
+  let welcomeChannel = member.guild.channels.cache.find(
+    (welcomechannel) => welcomeChannel.name == "welcome_leave"
+  );
 
-    let welcomeChannel = member.guild.channels.cache.find(welcomechannel => welcomeChannel.name == "welcome_leave");
-
-    const welcomeMessage = `welcome <@${member.id}> to the server! please check out 
+  const welcomeMessage = `welcome <@${
+    member.id
+  }> to the server! please check out 
     ${member.guild.channels.cache
-    .get(targetChannelId)
-    .toString()} for the Rules.`
+      .get(targetChannelId)
+      .toString()} for the Rules.`;
 
-    welcomeChannel.send(welcomeMessage);
+  welcomeChannel.send(welcomeMessage);
 });
 
 //a channel message to indicate when a user leaves the the server
-bot.on("guildMemberRemove", async member => {
+bot.on("guildMemberRemove", async (member) => {
+  console.log(`${member.id} left the server.`);
 
-    console.log(`${member.id} left the server.`);
+  let welcomeChannel = member.guild.channels.cache.find(
+    (welcomeChannel) => welcomeChannel.name == "welcome_leave"
+  );
 
-    let welcomeChannel = member.guild.channels.cache.find(welcomeChannel => welcomeChannel.name == "welcome_leave");
-
-    welcomeChannel.send(`${member} has bailed on the server!`);
+  welcomeChannel.send(`${member} has bailed on the server!`);
 });
 
-//a channel message to indicate a channel creation 
-bot.on("channelCreate", async channel => {
+//a channel message to indicate a channel creation
+bot.on("channelCreate", async (channel) => {
+  console.log(`${channel.name} has been created.`);
 
-    console.log(`${channel.name} has been created.`);
+  let generalChannel = channel.guild.channels.cache.find(
+    (generalChannel) => generalChannel.name == "general"
+  );
 
-    let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
-
-    generalChannel.send(`The channel <#${channel.id}> has been created.`);
-})
+  generalChannel.send(`The channel <#${channel.id}> has been created.`);
+});
 
 //a channel message to indicate a channel deletion
-bot.on("channelDelete", async channel => {
+bot.on("channelDelete", async (channel) => {
+  console.log(`${channel.name} has been deleted.`);
 
-    console.log(`${channel.name} has been deleted.`);
+  let generalChannel = channel.guild.channels.cache.find(
+    (generalChannel) => generalChannel.name == "general"
+  );
 
-    let generalChannel = channel.guild.channels.cache.find(generalChannel => generalChannel.name == "general");
-
-    generalChannel.send(`The channel "#${channel.name}" has been deleted.`);
+  generalChannel.send(`The channel "#${channel.name}" has been deleted.`);
 });
 
 // login with the dicord bot token
